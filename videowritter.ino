@@ -234,6 +234,7 @@ void setup(){
   //. + Down
   //. + Left
   //. + Right
+  ascii_to_scan[0xAB] = '|';     //. + HELP
 
   Keyboard.begin();
 }
