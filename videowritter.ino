@@ -1,3 +1,4 @@
+
 #include <Keyboard.h>
 //#include "SoftwareSerial.h"
 
@@ -258,8 +259,10 @@ void loop(){
       
       if(ctrl_state == 0){
         ctrl_state = 1;
+        Keyboard.press(KEY_LEFT_CTRL);
       }else{
         ctrl_state = 0;
+        Keyboard.release(KEY_LEFT_CTRL);
       }
     }
 
@@ -269,8 +272,10 @@ void loop(){
       
       if(alt_state == 0){
         alt_state = 1;
+        Keyboard.press(KEY_LEFT_ALT);
       }else{
         alt_state = 0;
+        Keyboard.release(KEY_LEFT_ALT);
       }
     }
 
@@ -281,22 +286,23 @@ void loop(){
 
     //Press control if lock is on
     if(ctrl_state != 0){
-      Keyboard.press(KEY_LEFT_CTRL);
-      Serial.print("CTRL ");
+      //Keyboard.press(KEY_LEFT_CTRL);
+      //Serial.print("CTRL ");
     }
 
     //Press alt if lock is on
     if(alt_state != 0){
-      Keyboard.press(KEY_LEFT_ALT);
-      Serial.print("ALT ");
+      //Keyboard.press(KEY_LEFT_ALT);
+      //Serial.print("ALT ");
     }
 
     //Check if we have an actual key press to send
     if(sendable_key == 1){
       Keyboard.press(val);
+      Keyboard.release(val);
     }
     
-    Keyboard.releaseAll();
+    //Keyboard.releaseAll();
 
     Serial.print(val, HEX);
     Serial.print("\n");
