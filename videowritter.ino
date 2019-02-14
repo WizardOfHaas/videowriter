@@ -226,7 +226,7 @@ void setup(){
 
   ascii_to_scan[0xC1] = '~';      //. + DELETE
   //. + TAB
-  //. + BACK SPACE
+  ascii_to_scan[0xC5] = KEY_DELETE;   //. + BACK SPACE
   //. + MENU
   //. + STYLE
   //. + SPELL
