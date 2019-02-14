@@ -1,6 +1,8 @@
 #include <Keyboard.h>
 
 char ascii_to_scan[255];
+char macros[128][8];
+
 char ctrl_state = 0;
 char alt_state = 0;
 char sendable_key = 0;
@@ -48,6 +50,10 @@ void setup(){
   //. + Left
   //. + Right
   ascii_to_scan[0xAB] = '|';     //. + HELP
+  
+  //Define macros: these are hooked to Caps Lock mode
+  set_macro(0x17, (const char[]) {KEY_ESC, ':', 'w', KEY_RETURN, 0, 0, 0, 0});
+  set_macro(0x11, (const char[]) {KEY_ESC, ':', 'q', KEY_RETURN, 0, 0, 0, 0});
 
   Keyboard.begin();
 }
@@ -87,8 +93,17 @@ void loop(){
     }
 
     //Do translation if outside of alpha-numeric block
-    if(val < 32 || val >= 126){
+    if(val >= 126){
       val = ascii_to_scan[val];
+    }else if(val < 32){ //Do macros
+      sendable_key = 0; //Disable sending the char normally
+
+      int i = 0;
+      while(macros[val][i] != 0 && i < 8){
+        Keyboard.write(macros[val][i]);
+        Serial.print(macros[val][i], HEX);
+        i++;
+      }
     }
 
     //Press control if lock is on
@@ -108,10 +123,14 @@ void loop(){
       Keyboard.press(val);
       Keyboard.release(val);
     }
-    
-    //Keyboard.releaseAll();
 
     Serial.print(val, HEX);
     Serial.print("\n");
+  }
+}
+
+void set_macro(int val, const char macro[8]){
+  for(int i = 0; i < 8; i++){
+    macros[val][i] = macro[i];
   }
 }
